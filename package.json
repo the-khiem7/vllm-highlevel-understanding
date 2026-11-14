@@ -1,1 +1,1 @@
-{"name":"s4-slides","private":true,"version":"0.0.0","dependencies":{"@fontsource/be-vietnam-pro":"^5.1.0","@fontsource/jetbrains-mono":"^5.1.1","gsap":"^3.12.5","hyperframes":"^0.9.46"}}
+{"name":"s4-slides","private":true,"version":"0.0.0","dependencies":{"@fontsource/be-vietnam-pro":"^5.1.0","@fontsource/jetbrains-mono":"^5.1.1","gsap":"^3.12.5","hyperframes":"^0.9.46"},"devDependencies":{"sharp":"^0.35.5"},"scripts":{"thumbs":"node scripts/thumbs.mjs","site":"node scripts/build-site.mjs"}}
