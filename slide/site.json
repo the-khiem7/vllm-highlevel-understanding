@@ -1,0 +1,29 @@
+{
+  "title": "S4 Presentations",
+  "titleHighlight": "S4",
+  "lang": "vi",
+  "topics": { "vllm": "vLLM" },
+  "theme": {
+    "bg": "#070b18",
+    "panel": "#10172b",
+    "line": "#23304f",
+    "ink": "#eef2ff",
+    "muted": "#9aa6c7",
+    "accent": "#6366f1",
+    "accentEnd": "#a855f7",
+    "titleGradient": "linear-gradient(90deg, #38bdf8, #a78bfa 55%, #fb7185)"
+  },
+  "font": {
+    "family": "Be Vietnam Pro",
+    "package": "@fontsource/be-vietnam-pro",
+    "subsets": [
+      "vietnamese",
+      "latin"
+    ],
+    "weights": [
+      400,
+      600,
+      800
+    ]
+  }
+}
