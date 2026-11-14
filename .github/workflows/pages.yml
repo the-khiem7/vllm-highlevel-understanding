@@ -1,0 +1,58 @@
+# slide-motions site v1
+# Builds the deck site in _site/ and publishes it to GitHub Pages.
+# Thumbnails are captured locally (npm run thumbs) and committed, so this workflow never needs a browser.
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "slide/**"
+      - "content/**"
+      - "scripts/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Rebuild each deck, fail when a committed index.html no longer matches its sources
+        run: |
+          for build in slide/*/*/src/build.mjs; do [ -f "$build" ] || continue; node "$build"; done
+          git diff --exit-code -- slide/
+      - name: Lint each deck
+        run: |
+          for deck in slide/*/*/; do
+            if [ -f "$deck/index.html" ]; then npx hyperframes lint "$deck"; fi
+          done
+      - run: npm run site
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
