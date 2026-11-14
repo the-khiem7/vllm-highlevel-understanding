@@ -1,0 +1,4 @@
+node_modules
+.hyperframes/
+skills-lock.json
+.claude/settings.local.json
