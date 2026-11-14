@@ -1,16 +1,19 @@
-# S4 - Presentations
+# vLLM - Serve more AI with the same GPU
 
-Slide decks for S4 presentations. Each topic has its content files in `content/<topic>/` and its decks in `slide/<topic>/<variant>/`, one deck per content file.
+vLLM does not make AI smarter. It lets one GPU answer many more people at once, so the same hardware serves more users at lower cost. This repository is the pitch: slide decks that explain how, in plain language, with a story you can retell after one viewing.
 
-## Setup
+Two ideas carry the whole talk:
 
-Node.js 22+ and npm. Install the shared toolchain once, from the repository root:
+- **PagedAttention** - the GPU's memory is the real bottleneck, not its speed. Instead of reserving one huge block per conversation, vLLM hands out small blocks only as they are needed and keeps a block table, like a receptionist with a seating plan. Memory stops going to waste.
+- **Continuous batching** - the moment one request finishes, the next one takes its place. Nobody waits for the slowest guest of the group to leave, so the GPU never sits idle between rounds.
 
-```sh
-npm install
-```
+Each deck tells it through one running metaphor, with animated figures and speaker notes:
 
-All HyperFrames decks share the root `package.json`. Run every command below from the repository root.
+- **Restaurant** - for an audience that has used a chatbot but never looked inside. A kitchen that is fast but a floor that is small. No jargon without an everyday name beside it.
+- **48-room hotel** - for AI and software engineers. Tours book rooms, a front desk keeps the ledger, and the technical names (KV cache, block table, batching) stay in plain sight.
+
+Pick the deck that fits your audience below, or open it online and present it yourself.
+
 
 ## Decks
 
@@ -46,28 +49,6 @@ npx hyperframes present slide/vllm/llmhotel48 --port 3005         # serve, then 
 ```
 
 Slides are in English, speaker notes in Vietnamese. Edit `slide/vllm/llmhotel48/src/` (`build.mjs`, `deck.css`) or the content file, never `index.html`.
-
-## Thumbnails
-
-After a deck build, capture its cover and commit it with the deck:
-
-```sh
-npm run thumbs -- vllm/restaurant      # one deck; without an argument, every deck
-```
-
-It snapshots slide 1 half a second before it ends, when every element has entered, and writes `slide/<topic>/<variant>/thumbnail/cover.webp` (960x540). The capture uses the Chrome that HyperFrames manages, so it runs locally; CI only reuses the committed file.
-
-## Site and deploy
-
-```sh
-npm run site      # build _site/: the homepage plus every deck's presenter page
-```
-
-For each deck the build starts `hyperframes present --no-open`, saves the page it serves with its paths made relative, and copies the deck's `index.html`, `assets/` and `thumbnail/`. The build stops when the page of a newer HyperFrames no longer matches the expected paths. Content files without a deck appear on the homepage as not built.
-
-The homepage takes its title and the words of it shown in a gradient (`titleHighlight`), language (`vi` or `en`), topic names, colours and font from `slide/site.json`; without that file it falls back to the repository name, English and a neutral dark theme. The scripts in `scripts/` and the workflow carry the header `slide-motions site v1` and are the same in every deck repository, so change `slide/site.json`, not the scripts.
-
-`.github/workflows/pages.yml` publishes `_site/` to GitHub Pages on every push to `main` that touches `slide/`, `content/`, `scripts/` or the package files. Before building, it re-runs each deck's `src/build.mjs` and fails when a committed `index.html` no longer matches its sources, then runs `hyperframes lint` on each deck. Pages must be set once to Settings > Pages > Source > GitHub Actions. Speaker notes are part of each deck page, so they are public on the site.
 
 ## Presenting
 
